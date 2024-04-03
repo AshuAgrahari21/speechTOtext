@@ -6,7 +6,7 @@ def speech_to_text():
 
     with sr.Microphone() as source:
         print("Say something...")
-        # Adjust for ambient noise
+
         recognizer.adjust_for_ambient_noise(source)
         try:
             audio = recognizer.listen(source, timeout=10, phrase_time_limit=10)
