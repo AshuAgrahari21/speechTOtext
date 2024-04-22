@@ -1,0 +1,33 @@
+import PySimpleGUI as sg
+import speech_recognition as sr
+
+sg.theme('DarkBlue14')
+
+layout = [[sg.Text("speech to Text")],
+          [sg.Multiline(size=(70, 20), key="-OUTPUT-")],
+          [sg.Button("Record", button_color=('White', 'gray'), border_width=10),
+           sg.Button("Exit", button_color=('White', 'red'), border_width=10)]]
+
+window = sg.Window("speech to text", layout)
+
+while True:
+    event, values = window.read()
+    if event == "Exit" or event == sg.WIN_CLOSED:
+        break
+    elif event == "Record":
+        # Initialize recognizer
+        r = sr.Recognizer()
+
+        # record audio
+        with sr.Microphone() as source:
+            audio = r.listen(source)
+            # recognize speech using google speech recognition
+        try:
+            text = r.recognize_google(audio)
+            window["-OUTPUT-"].update(text)
+        except sr.UnknownValueError:
+            window["-OUTPUT-"].update("could not understand")
+        except sr.RequestError as e:
+            window["-OUTPUT-"].update(f"Error:{e}")
+
+window.close()
